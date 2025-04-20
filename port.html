@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Portfolio</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #f0f0f0;
+            --accent-green: #4ade80;
+            --accent-blue: #60a5fa;
+            --accent-pink: #f472b6;
+            --accent-yellow: #fbbf24;
+            --terminal-bg: #000000;
+            --border-color: #333;
+        }
+
+/* GLOBAL RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Courier New', monospace;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* TERMINAL WINDOW */
+.terminal {
+  margin-top: 20px;
+  background-color: var(--terminal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.terminal-header {
+  padding: 10px;
+  display: flex;
+  background-color: var(--border-color);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.terminal-body {
+  padding: 20px;
+}
+
+/* PROMPT */
+.prompt {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.chevron,
+.command {
+  color: var(--accent-green);
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+/* NAVIGATION */
+.navigation {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.nav-item {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.active {
+  color: var(--accent-green);
+  text-decoration: underline;
+}
+
+/* SECTION STYLES */
+.section {
+  margin-top: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-content {
+  padding-left: 20px;
+}
+
+/* PROFILE INFO */
+.info-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.profile-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.info-details h2 {
+  margin-bottom: 10px;
+}
+
+/* TAG COLORS */
+.tag {
+  background-color: #d1e7dd;
+  color: #065f46;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-family: monospace;
+}
+
+/* PROJECT CARD */
+.project {
+  background-color: #e9f0ec;
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  position: relative;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.project-title {
+  color: var(--accent-blue);
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.project-desc {
+  margin: 10px 0;
+  color: #000; /* Force black text for content */
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.project-tags {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ICON LINK (e.g., GitHub icon only) */
+.icon-link {
+  color: var(--text-color);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.icon-link:hover {
+  transform: scale(1.2);
+}
+
+/* TECH STACK BOXES */
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tech-item {
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--accent-green);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* FOOTER */
+.footer {
+  margin-top: 30px;
+  text-align: center;
+  color: var(--accent-green);
+  font-size: 14px;
+}
+
+.social-links a {
+  color: var(--accent-green);
+  text-decoration: none;
+  margin-right: 15px;
+}
+
+.social-links a:hover {
+  text-decoration: underline;
+}
+
+.year {
+  color: var(--accent-yellow);
+  margin-bottom: 10px;
+}
+
+/* CONTENT TOGGLE SECTIONS */
+.content-section {
+  display: none;
+}
+
+.content-section.active {
+  display: block;
+}
+
+/* RESPONSIVENESS */
+@media (max-width: 768px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  .navigation {
+    flex-wrap: wrap;
+  }
+}
+</style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-header"></div>
+        <div class="terminal-body">
+            <div class="prompt">
+                <span class="chevron">></span>
+                <div class="navigation">
+                    <a href="#home" class="nav-item active" data-section="home">~/home</a>
+                    <a href="#stacks" class="nav-item" data-section="stacks">./stacks</a>
+                    <a href="#projects" class="nav-item" data-section="projects">./projects</a>
+                    <a href="#about" class="nav-item" data-section="about">./..</a>
+                </div>
+            </div>
+
+            <!-- Home Section -->
+            <div id="home" class="content-section active">
+                <div class="section">
+                    <div class="section-title">
+                        <span class="chevron">~</span>
+                        <span class="command">info</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="info-grid">
+                            <img class="profile-img" src="˚⭑· ͟͟͞͞➳ ᴬⁱ ᴬʳᵗ.jpeg" alt="Profile Picture">
+                            <div class="info-details">
+                                <h2>Hi,I am <span style="color: var(--accent-green)">Prathamesh(AckAp)</span></h2>
+                                <a>Full Stack Developer <a  href="https://www.djangoproject.com/start/overview/"><span class="value">${Django}</span></a></p>
+                                <a>Web3 Dev <a  href="https://www.solana.com"><span class="value">${Solana}</span></a></p>
+                                <p>DSA && leetcode <a href="https://leetcode.com/u/prathamesh43/" target="_blank"><span class="value">${lt}</span></a></p>
+                                <p>Mobile Developer <span class="value">${Native}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">
+                        <span class="chevron">~</span>
+                        <span class="command">about</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="year">2023</div>
+                        <p>joined college</p>
+                        <div class="year">2024</div>                    
+                        <p>dsa and 100+ leetcode ques</p>
+                        <div class="year">2025</div>        
+                <p>Started web Devlopment</p>
+                </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">
+                        <span class="chevron">~</span>
+                        <span class="command">social_links</span>
+                    </div>
+                    <div class="section-content social-links">
+                        <a href="https://github.com/prathameshatkare">Github</a>
+                        <a href="https://x.com/PRATHAMESH34980">Twitter</a>
+                        <a href="https://www.linkedin.com/in/prathamesh-atkare-6223aa255/">LinkedIn</a>
+                        <a href="https://www.instagram.com/prathmeshatkare07/">Instagram</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tech Stack Section -->
+            <div id="stacks" class="content-section">
+                <div class="section">
+                    <div class="section-title">
+                        <span class="chevron">~</span>
+                        <span class="command">tech_stack</span>
+                    </div>
+                    <div class="section-content">
+                        <h3 style="color: var(--accent-yellow)">Frontend</h3>
+                        <div class="tech-stack">
+                            <span class="tech-item">React</span>
+                            <span class="tech-item">Next.js</span>
+                            <span class="tech-item">TypeScript</span>
+                            <span class="tech-item">HTML/CSS</span>
+                            <span class="tech-item">Tailwind CSS</span>
+                            <span class="tech-item">Redux</span>
+                        </div>
+                        
+                        <h3 style="color: var(--accent-yellow); margin-top: 20px">Backend</h3>
+                        <div class="tech-stack">
+                            <span class="tech-item">Django</span>
+                            <span class="tech-item">Flask</span>
+                            <span class="tech-item">MongoDB</span>
+                            <span class="tech-item">PostgreSQL</span>
+                            <span class="tech-item">Fastapi</span>
+                        </div>
+                        
+                        <h3 style="color: var(--accent-yellow); margin-top: 20px">Web3</h3>
+                        <div class="tech-stack">
+                            <span class="tech-item">Solana</span>
+                            <span class="tech-item">Rust</span>
+                            <span class="tech-item">Web3.js</span>
+                            <span class="tech-item">Anchor</span>
+                        </div>
+                        
+                        
+                        
+                        <h3 style="color: var(--accent-yellow); margin-top: 20px">Tools</h3>
+                        <div class="tech-stack">
+                            <span class="tech-item">Git</span>
+                            <span class="tech-item">Docker</span>
+                            <span class="tech-item">VS Code</span>
+                            <span class="tech-item">Figma</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Section -->
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <title>Projects</title>
+                <link rel="stylesheet" href="styles.css">
+                <!-- Font Awesome for GitHub icon -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+            </head>
+            <body>
+               <!-- Projects Section -->
+<div id="projects" class="content-section">
+    <div class="section">
+        <div class="section-title">
+            <span class="chevron">~</span>
+            <span class="command">projects</span>
+        </div>
+        <div class="section-content">
+
+            <div class="project">
+                <div class="project-title">
+                    <a href="https://github.com/prathameshatkare/ecommerce-django" class="project-link" target="_blank">E-commerce Website using Django</a>
+                </div>
+                <p class="project-desc">A full-stack e-commerce web application built using Django, featuring product browsing, cart functionality, order management, and user authentication.</p>
+                <div class="project-tech">
+                    <span class="tag">Django</span>
+                    <span class="tag">PostgreSQL</span>
+                    <span class="tag">HTML</span>
+                    <span class="tag">CSS</span>
+                    <span class="tag">JavaScript</span>
+                </div>
+            </div>
+
+            <div class="project">
+                <div class="project-title">
+                    <a href="https://github.com/prathameshatkare/airline_bot" class="project-link" target="_blank">Airlines Expert System Bot</a>
+                </div>
+                <p class="project-desc">An AI-driven expert system bot that helps users with flight recommendations, booking assistance, and real-time airline FAQs.</p>
+                <div class="project-tech">
+                    <span class="tag">Python</span>
+                    <span class="tag">NLP</span>
+                    <span class="tag">Flask</span>
+                    <span class="tag">OpenAI API</span>
+                </div>
+            </div>
+
+            <div class="project">
+                <div class="project-title">
+                    <a href="https://github.com/prathameshatkare/Youtube-downloader" class="project-link" target="_blank">YouTube Video Downloader Website</a>
+                </div>
+                <p class="project-desc">A user-friendly website to download YouTube videos in various formats and resolutions using URL input.</p>
+                <div class="project-tech">
+                    <span class="tag">Python</span>
+                    <span class="tag">Django</span>
+                    <span class="tag">pytube</span>
+                    <span class="tag">Bootstrap</span>
+                </div>
+            </div>
+
+            <div class="project">
+                <div class="project-title">
+                    <a href="https://github.com/prathameshatkare/Youtube-downloader" class="project-link" target="_blank">YouTube Video Downloader Website</a>
+                </div>
+                <p class="project-desc">A user-friendly website to download YouTube videos in various formats and resolutions using URL input.</p>
+                <div class="project-tech">
+                    <span class="tag">Python</span>
+                    <span class="tag">Django</span>
+                    <span class="tag">pytube</span>
+                    <span class="tag">Bootstrap</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            </body>
+            </html>
+            
+            
+            <!-- About Section -->
+            <div id="about" class="content-section">
+                <div class="section">
+                    <div class="section-title">
+                        <span class="chevron">~</span>
+                        <span class="command">more_about_me</span>
+                    </div>
+                    <div class="section-content">
+                        <p>I'm a passionate developer who loves building intuitive and efficient applications. When I'm not coding, you can find me solving algorithm problems, exploring new technologies, or contributing to open source.</p>
+                        
+                        <div class="year">Education</div>
+                        <p>B.S. Computer Science - Pune University  (2022-2026)</p>
+                        
+                        <div class="year">Interests</div>
+                        <p>Blockchain technology, web development, algorithms, open source</p>
+                        
+                        <div class="year">Contact</div>
+                        <p>email: prathmeshatkare07.email@example.com</p>
+
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                @terminal by <span style="color: var(--accent-green)">AckAp</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active nav item
+                document.querySelectorAll('.nav-item').forEach(link => {
+                    link.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Show corresponding section
+                const sectionId = this.getAttribute('data-section');
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
